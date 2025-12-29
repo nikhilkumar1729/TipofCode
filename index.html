@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>365 Days of Java Tips</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .day-selector {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .day-display {
+            text-align: center;
+            flex: 1;
+        }
+
+        .day-number {
+            font-size: 3em;
+            font-weight: bold;
+            color: #667eea;
+            line-height: 1;
+        }
+
+        .day-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .nav-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-btn:hover {
+            background: #5568d3;
+            transform: scale(1.1);
+        }
+
+        .nav-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: scale(1);
+        }
+
+        .tip-content {
+            margin-bottom: 20px;
+        }
+
+        .tip-title {
+            font-size: 1.5em;
+            color: #667eea;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .tip-description {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .code-block {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .code-block pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .checkbox-container:hover {
+            background: #e9ecef;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-container label {
+            cursor: pointer;
+            flex: 1;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .checkbox-container input[type="checkbox"]:checked + label {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: #666;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+
+        .quick-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .quick-nav input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        .quick-nav button {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .quick-nav button:hover {
+            background: #5568d3;
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            background: #e9ecef;
+            border-radius: 15px;
+            font-size: 0.85em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>☕ 365 Days of Java Tips</h1>
+            <p>Master Java one day at a time</p>
+        </div>
+
+        <div class="card">
+            <div class="quick-nav">
+                <input type="number" id="jumpDay" min="1" max="365" placeholder="Jump to day...">
+                <button onclick="jumpToDay()">Go</button>
+                <button onclick="goToToday()">Today</button>
+            </div>
+
+            <div class="day-selector">
+                <button class="nav-btn" onclick="previousDay()" id="prevBtn">←</button>
+                <div class="day-display">
+                    <div class="day-number" id="dayNumber">1</div>
+                    <div class="day-label">of 365 days</div>
+                </div>
+                <button class="nav-btn" onclick="nextDay()" id="nextBtn">→</button>
+            </div>
+
+            <div class="tip-content">
+                <span class="category-badge" id="category">Basics</span>
+                <h2 class="tip-title" id="tipTitle">Loading...</h2>
+                <p class="tip-description" id="tipDescription">Loading...</p>
+                <div class="code-block" id="codeBlock" style="display:none;">
+                    <pre id="codeContent"></pre>
+                </div>
+            </div>
+
+            <div class="checkbox-container" onclick="toggleComplete()">
+                <input type="checkbox" id="completeCheck">
+                <label for="completeCheck">Mark today's tip as learned</label>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">0 of 365 tips completed (0%)</div>
+        </div>
+    </div>
+
+    <script>
+        const javaTips = [
+            { title: "Hello World Basics", category: "Basics", description: "Every Java program starts with a class and a main method. The main method is the entry point of your program.", code: "public class HelloWorld {\n    public static void main(String[] args) {\n        System.out.println(\"Hello, World!\");\n    }\n}" },
+            { title: "Variables and Data Types", category: "Basics", description: "Java has 8 primitive data types: byte, short, int, long, float, double, boolean, and char. Choose the right type for memory efficiency.", code: "int age = 25;\ndouble price = 99.99;\nboolean isActive = true;\nchar grade = 'A';" },
+            { title: "String Immutability", category: "Strings", description: "Strings in Java are immutable. Once created, their value cannot be changed. Any modification creates a new String object.", code: "String name = \"Java\";\nname = name + \" Programming\"; // Creates new String\n// Original \"Java\" still exists in memory" },
+            { title: "StringBuilder for Concatenation", category: "Strings", description: "Use StringBuilder when concatenating strings in loops. It's much more efficient than using + operator repeatedly.", code: "StringBuilder sb = new StringBuilder();\nfor (int i = 0; i < 1000; i++) {\n    sb.append(i);\n}\nString result = sb.toString();" },
+            { title: "Final Variables", category: "Basics", description: "The 'final' keyword makes a variable constant. Once assigned, its value cannot be changed. Use UPPER_CASE naming convention.", code: "final double PI = 3.14159;\nfinal int MAX_SIZE = 100;\n// PI = 3.14; // Compilation error!" },
+            { title: "Method Overloading", category: "OOP", description: "Method overloading allows multiple methods with the same name but different parameters. This provides flexibility in method calls.", code: "public int add(int a, int b) {\n    return a + b;\n}\n\npublic double add(double a, double b) {\n    return a + b;\n}" },
+            { title: "Constructor Basics", category: "OOP", description: "Constructors initialize objects. If you don't define one, Java provides a default no-arg constructor automatically.", code: "public class Car {\n    String model;\n    \n    public Car(String model) {\n        this.model = model;\n    }\n}" },
+            { title: "this Keyword", category: "OOP", description: "Use 'this' to refer to the current object instance and to differentiate between instance variables and parameters.", code: "public class Person {\n    String name;\n    \n    public Person(String name) {\n        this.name = name; // Distinguish parameter from field\n    }\n}" },
+            { title: "Static Methods", category: "OOP", description: "Static methods belong to the class, not instances. They can be called without creating an object. Utility methods are often static.", code: "public class MathUtils {\n    public static int square(int n) {\n        return n * n;\n    }\n}\n// Call: MathUtils.square(5);" },
+            { title: "Encapsulation with Getters/Setters", category: "OOP", description: "Make fields private and provide public getters/setters. This protects data and allows validation logic.", code: "public class Account {\n    private double balance;\n    \n    public double getBalance() {\n        return balance;\n    }\n    \n    public void setBalance(double balance) {\n        if (balance >= 0) this.balance = balance;\n    }\n}" },
+            { title: "Arrays Declaration", category: "Arrays", description: "Java arrays are fixed-size data structures. Declare them with type[] or type array[].", code: "int[] numbers = new int[5];\nString[] names = {\"Alice\", \"Bob\", \"Charlie\"};\nint[][] matrix = new int[3][3];" },
+            { title: "Enhanced For Loop", category: "Loops", description: "The enhanced for loop (for-each) is cleaner for iterating through arrays and collections when you don't need the index.", code: "String[] fruits = {\"Apple\", \"Banana\", \"Orange\"};\nfor (String fruit : fruits) {\n    System.out.println(fruit);\n}" },
+            { title: "ArrayList Basics", category: "Collections", description: "ArrayList is a resizable array. Unlike arrays, it can grow and shrink dynamically. It only stores objects, not primitives.", code: "import java.util.ArrayList;\n\nArrayList<String> list = new ArrayList<>();\nlist.add(\"Java\");\nlist.add(\"Python\");\nlist.remove(0);" },
+            { title: "Try-Catch Exception Handling", category: "Exceptions", description: "Use try-catch blocks to handle exceptions gracefully and prevent program crashes. Always catch specific exceptions first.", code: "try {\n    int result = 10 / 0;\n} catch (ArithmeticException e) {\n    System.out.println(\"Cannot divide by zero\");\n}" },
+            { title: "Finally Block", category: "Exceptions", description: "The finally block always executes, whether an exception occurs or not. Perfect for cleanup code like closing resources.", code: "try {\n    // risky code\n} catch (Exception e) {\n    // handle error\n} finally {\n    // always runs - cleanup here\n}" },
+            { title: "Interface Implementation", category: "OOP", description: "Interfaces define contracts. A class can implement multiple interfaces, providing Java's way of multiple inheritance.", code: "public interface Drawable {\n    void draw();\n}\n\npublic class Circle implements Drawable {\n    public void draw() {\n        System.out.println(\"Drawing circle\");\n    }\n}" },
+            { title: "Abstract Classes", category: "OOP", description: "Abstract classes can't be instantiated. They can have both abstract and concrete methods. Use them for partial implementation.", code: "public abstract class Animal {\n    abstract void makeSound();\n    \n    public void sleep() {\n        System.out.println(\"Sleeping...\");\n    }\n}" },
+            { title: "Inheritance with extends", category: "OOP", description: "Inheritance allows a class to inherit properties and methods from another class. Use 'extends' keyword for class inheritance.", code: "public class Animal {\n    void eat() { }\n}\n\npublic class Dog extends Animal {\n    void bark() { }\n}" },
+            { title: "Method Overriding", category: "OOP", description: "Override parent class methods in child classes to provide specific implementations. Use @Override annotation for clarity.", code: "public class Animal {\n    void sound() { System.out.println(\"Some sound\"); }\n}\n\npublic class Dog extends Animal {\n    @Override\n    void sound() { System.out.println(\"Bark\"); }\n}" },
+            { title: "Super Keyword", category: "OOP", description: "Use 'super' to call parent class constructors and methods. Essential when you want to extend parent functionality.", code: "public class Dog extends Animal {\n    public Dog() {\n        super(); // Call parent constructor\n    }\n    \n    void makeSound() {\n        super.makeSound(); // Call parent method\n    }\n}" },
+            { title: "Polymorphism", category: "OOP", description: "Polymorphism allows objects to be treated as instances of their parent class. One interface, multiple implementations.", code: "Animal myPet = new Dog(); // Dog object, Animal reference\nmyPet.sound(); // Calls Dog's sound method" },
+            { title: "Scanner for Input", category: "I/O", description: "Use Scanner class to read user input from console. Remember to import java.util.Scanner and close the scanner.", code: "import java.util.Scanner;\n\nScanner sc = new Scanner(System.in);\nSystem.out.print(\"Enter name: \");\nString name = sc.nextLine();\nsc.close();" },
+            { title: "Ternary Operator", category: "Basics", description: "The ternary operator is a shorthand for if-else statements. Use it for simple conditional assignments.", code: "int age = 20;\nString status = (age >= 18) ? \"Adult\" : \"Minor\";\n// Instead of if-else block" },
+            { title: "Switch Statement", category: "Control Flow", description: "Switch statements provide cleaner code for multiple conditions. In Java 12+, you can use enhanced switch expressions.", code: "int day = 3;\nString dayName = switch(day) {\n    case 1 -> \"Monday\";\n    case 2 -> \"Tuesday\";\n    case 3 -> \"Wednesday\";\n    default -> \"Other\";\n};" },
+            { title: "Break and Continue", category: "Loops", description: "Break exits a loop entirely. Continue skips the current iteration and moves to the next one.", code: "for (int i = 0; i < 10; i++) {\n    if (i == 5) break; // Exit loop\n    if (i % 2 == 0) continue; // Skip even numbers\n    System.out.println(i);\n}" },
+            { title: "Wrapper Classes", category: "Basics", description: "Wrapper classes convert primitives to objects. They're required for collections and provide useful utility methods.", code: "Integer num = 100; // Autoboxing\nint value = num; // Unboxing\n\nString str = \"123\";\nint parsed = Integer.parseInt(str);" },
+            { title: "Comparing Strings", category: "Strings", description: "Never use == for string comparison. Use .equals() or .equalsIgnoreCase() methods to compare string content.", code: "String s1 = \"Java\";\nString s2 = \"Java\";\n\n// Wrong: s1 == s2\n// Right:\nif (s1.equals(s2)) { }" },
+            { title: "String Methods", category: "Strings", description: "Strings have many useful methods: length(), charAt(), substring(), toLowerCase(), toUpperCase(), trim(), contains(), etc.", code: "String text = \" Hello World \";\nint len = text.length(); // 13\nString lower = text.toLowerCase();\nString trimmed = text.trim(); // \"Hello World\"" },
+            { title: "Format Strings", category: "Strings", description: "Use String.format() or System.out.printf() for formatted output. It's cleaner than concatenation.", code: "String name = \"Alice\";\nint age = 25;\nString msg = String.format(\"Name: %s, Age: %d\", name, age);\nSystem.out.printf(\"%.2f%%\\n\", 99.999);" },
+            { title: "Math Class Methods", category: "Utilities", description: "The Math class provides mathematical operations: abs(), pow(), sqrt(), max(), min(), random(), ceil(), floor().", code: "double result = Math.pow(2, 3); // 8.0\nint max = Math.max(10, 20); // 20\ndouble random = Math.random(); // 0.0 to 1.0\nint rounded = (int) Math.round(4.7); // 5" },
+            { title: "HashMap Basics", category: "Collections", description: "HashMap stores key-value pairs. It provides O(1) average time complexity for get and put operations.", code: "import java.util.HashMap;\n\nHashMap<String, Integer> map = new HashMap<>();\nmap.put(\"Alice\", 25);\nmap.put(\"Bob\", 30);\nint age = map.get(\"Alice\"); // 25" },
+            { title: "HashSet for Unique Elements", category: "Collections", description: "HashSet stores unique elements only. It's perfect when you need to remove duplicates or check membership.", code: "import java.util.HashSet;\n\nHashSet<String> set = new HashSet<>();\nset.add(\"Apple\");\nset.add(\"Apple\"); // Ignored, already exists\nboolean has = set.contains(\"Apple\"); // true" },
+            { title: "Iterating Through Collections", category: "Collections", description: "Use enhanced for loop or Iterator to traverse collections. For maps, iterate through entrySet().", code: "HashMap<String, Integer> map = new HashMap<>();\nfor (Map.Entry<String, Integer> entry : map.entrySet()) {\n    System.out.println(entry.getKey() + \": \" + entry.getValue());\n}" },
+            { title: "List Interface Methods", category: "Collections", description: "List interface provides ordered collection with methods: add(), get(), remove(), size(), contains(), indexOf().", code: "List<String> list = new ArrayList<>();\nlist.add(\"Java\");\nlist.add(0, \"Python\"); // Insert at index\nString item = list.get(1); // Get by index\nlist.remove(\"Java\"); // Remove by value" },
+            { title: "LinkedList vs ArrayList", category: "Collections", description: "ArrayList is faster for random access. LinkedList is faster for insertions/deletions in the middle. Choose based on usage.", code: "// Use ArrayList for frequent access\nList<String> arrayList = new ArrayList<>();\n\n// Use LinkedList for frequent insertions\nList<String> linkedList = new LinkedList<>();" },
+            { title: "Queue Interface", category: "Collections", description: "Queue follows FIFO (First In First Out). Use add(), offer(), remove(), poll(), peek() methods.", code: "import java.util.*;\n\nQueue<String> queue = new LinkedList<>();\nqueue.offer(\"First\");\nqueue.offer(\"Second\");\nString head = queue.poll(); // Removes and returns \"First\"" },
+            { title: "Stack Operations", category: "Collections", description: "Stack follows LIFO (Last In First Out). Use push(), pop(), peek(), empty() methods.", code: "import java.util.Stack;\n\nStack<Integer> stack = new Stack<>();\nstack.push(1);\nstack.push(2);\nint top = stack.pop(); // Returns 2\nint peek = stack.peek(); // Returns 1, doesn't remove" },
+            { title: "File Reading with BufferedReader", category: "I/O", description: "BufferedReader is efficient for reading text files line by line. Always close resources or use try-with-resources.", code: "import java.io.*;\n\ntry (BufferedReader br = new BufferedReader(new FileReader(\"file.txt\"))) {\n    String line;\n    while ((line = br.readLine()) != null) {\n        System.out.println(line);\n    }\n} catch (IOException e) {\n    e.printStackTrace();\n}" },
+            { title: "File Writing", category: "I/O", description: "Use FileWriter or BufferedWriter to write text to files. BufferedWriter is more efficient for large amounts of data.", code: "import java.io.*;\n\ntry (BufferedWriter bw = new BufferedWriter(new FileWriter(\"output.txt\"))) {\n    bw.write(\"Hello, World!\");\n    bw.newLine();\n    bw.write(\"Java Programming\");\n} catch (IOException e) {\n    e.printStackTrace();\n}" },
+            { title: "Try-with-Resources", category: "Exceptions", description: "Try-with-resources automatically closes resources. Any class implementing AutoCloseable can be used.", code: "try (Scanner sc = new Scanner(new File(\"data.txt\"))) {\n    while (sc.hasNext()) {\n        System.out.println(sc.nextLine());\n    }\n} catch (FileNotFoundException e) {\n    e.printStackTrace();\n}\n// Scanner automatically closed" },
+            { title: "Custom Exceptions", category: "Exceptions", description: "Create custom exceptions by extending Exception class. This makes your code more specific and maintainable.", code: "public class InvalidAgeException extends Exception {\n    public InvalidAgeException(String message) {\n        super(message);\n    }\n}\n\n// Usage\nif (age < 0) throw new InvalidAgeException(\"Age cannot be negative\");" },
+            { title: "Throw vs Throws", category: "Exceptions", description: "'throw' is used to actually throw an exception. 'throws' declares that a method might throw exceptions.", code: "// throws in method signature\npublic void readFile() throws IOException {\n    // throw to actually throw\n    throw new IOException(\"File not found\");\n}" },
+            { title: "Multiple Catch Blocks", category: "Exceptions", description: "You can have multiple catch blocks for different exceptions. Put more specific exceptions before general ones.", code: "try {\n    // code\n} catch (FileNotFoundException e) {\n    // handle specific exception\n} catch (IOException e) {\n    // handle general exception\n} catch (Exception e) {\n    // catch all others\n}" },
+            { title: "Arrays.toString()", category: "Arrays", description: "Use Arrays.toString() to print array contents nicely. It's much better than printing the array object directly.", code: "import java.util.Arrays;\n\nint[] numbers = {1, 2, 3, 4, 5};\nSystem.out.println(Arrays.toString(numbers));\n// Output: [1, 2, 3, 4, 5]" },
+            { title: "Arrays.sort()", category: "Arrays", description: "Arrays.sort() sorts arrays in ascending order. For objects, they must implement Comparable or provide a Comparator.", code: "import java.util.Arrays;\n\nint[] numbers = {5, 2, 8, 1, 9};\nArrays.sort(numbers);\n// numbers is now {1, 2, 5, 8, 9}" },
+            { title: "Copying Arrays", category: "Arrays", description: "Use Arrays.copyOf() or System.arraycopy() to copy arrays. Simple assignment creates a reference, not a copy.", code: "int[] original = {1, 2, 3};\nint[] copy = Arrays.copyOf(original, original.length);\n\n// Or:\nint[] copy2 = new int[3];\nSystem.arraycopy(original, 0, copy2, 0, 3);" },
+            { title: "2D Arrays", category: "Arrays", description: "2D arrays are arrays of arrays. They're useful for matrices, grids, and tables.", code: "int[][] matrix = new int[3][3];\nmatrix[0][0] = 1;\n\nint[][] grid = {\n    {1, 2, 3},\n    {4, 5, 6},\n    {7, 8, 9}\n};" },
+            { title: "Varargs (Variable Arguments)", category: "Methods", description: "Varargs allow methods to accept variable number of arguments. Use type... syntax. Varargs must be the last parameter.", code: "public int sum(int... numbers) {\n    int total = 0;\n    for (int num : numbers) {\n        total += num;\n    }\n    return total;\n}\n\n// Call: sum(1, 2, 3, 4, 5)" },
+            { title: "Method Return Types", category: "Methods", description: "Methods can return any type or void. Use clear, descriptive return types and ensure all code paths return a value.", code: "public String greet(String name) {\n    return \"Hello, \" + name;\n}\n\npublic void printMessage(String msg) {\n    System.out.println(msg);\n    // void returns nothing\n}" },
+            { title: "Access Modifiers", category: "OOP", description: "Java has 4 access levels: private (class only), default (package), protected (package + subclasses), public (everywhere).", code: "public class Example {\n    private int secret; // Only this class\n    int packageVar; // Package level\n    protected int inherited; // Subclasses too\n    public int everyone; // All classes\n}" },
+            { title: "Static Variables", category: "OOP", description: "Static variables are shared among all instances of a class. They belong to the class, not individual objects.", code: "public class Counter {\n    static int count = 0; // Shared by all instances\n    \n    public Counter() {\n        count++; // Increments for all\n    }\n}" },
+            { title: "Static Blocks", category: "OOP", description: "Static blocks execute once when class is loaded. Use them for complex static initialization.", code: "public class Config {\n    static String appName;\n    \n    static {\n        // Runs once when class loads\n        appName = \"MyApp\";\n        System.out.println(\"Static block executed\");\n    }\n}" },
+            { title: "Enum Basics", category: "Enums", description: "Enums define a fixed set of constants. They're type-safe and more powerful than static final constants.", code: "public enum Day {\n    MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY\n}\n\nDay today = Day.MONDAY;\nif (today == Day.FRIDAY) { }" },
+            { title: "Enum with Values", category: "Enums", description: "Enums can have fields, constructors, and methods. This makes them very powerful for representing fixed sets of values.", code: "public enum Size {\n    SMALL(10), MEDIUM(20), LARGE(30);\n    \n    private int value;\n    \n    Size(int value) {\n        this.value = value;\n    }\n    \n    public int getValue() { return value; }\n}" },
+            { title: "Date and Time API", category: "Date/Time", description: "Use java.time package (Java 8+) for date/time operations. It's much better than old Date and Calendar classes.", code: "import java.time.*;\n\nLocalDate today = LocalDate.now();\nLocalTime now = LocalTime.now();\nLocalDateTime dateTime = LocalDateTime.now();\nSystem.out.println(today); // 2025-01-15" },
+            { title: "Formatting Dates", category: "Date/Time", description: "Use DateTimeFormatter to format dates and times in custom patterns.", code: "import java.time.*;\nimport java.time.format.DateTimeFormatter;\n\nLocalDateTime now = LocalDateTime.now();\nDateTimeFormatter formatter = DateTimeFormatter.ofPattern(\"dd-MM-yyyy HH:mm:ss\");\nString formatted = now.format(formatter);" },
+            { title: "Lambda Expressions", category: "Functional", description: "Lambdas provide a concise way to create anonymous functions. They're essential for functional programming in Java.", code: "// Old way\nRunnable r1 = new Runnable() {\n    public void run() { System.out.println(\"Hello\"); }\n};\n\n// Lambda way\nRunnable r2 = () -> System.out.println(\"Hello\");" },
+            { title: "Functional Interfaces", category: "Functional", description: "Functional interfaces have exactly one abstract method. They can be implemented using lambda expressions.", code: "@FunctionalInterface\ninterface Calculator {\n    int calculate(int a, int b);\n}\n\nCalculator add = (a, b) -> a + b;\nint result = add.calculate(
